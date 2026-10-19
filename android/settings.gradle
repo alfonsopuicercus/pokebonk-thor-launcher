@@ -2,3 +2,8 @@ pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal()
 dependencyResolutionManagement { repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS); repositories { google(); mavenCentral() } }
 rootProject.name = 'PokeBonkThorLauncher'
 include ':app'
+
+if (providers.gradleProperty('withInputProbe').isPresent()) {
+    include ':inputprobe'
+    project(':inputprobe').projectDir = file('../tests/android-input-probe')
+}

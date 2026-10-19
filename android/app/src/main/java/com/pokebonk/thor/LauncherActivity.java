@@ -14,16 +14,16 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-/** Opens the official game in a real browser, retaining that browser's account and storage. */
+/** Native play entry and browser fallback for the official online game. */
 public final class LauncherActivity extends Activity {
     private static final String GAME_URL = "https://pokebonk.com/";
-    private static final String GUIDE = "Use Thor's normal Android gamepad mode. Disable touch-mapping overlays for this game. Open the game on the top screen, tap once for sound, then press a face button with both sticks released.\n\n"
+    private static final String GUIDE = "Choose Play with native controls. The app reads Android stick/button events directly, with a fixed 22% deadzone. No touch mapping or screen gestures are used. Start + Select opens controller diagnostics and Release all inputs.\n\n"
         + "Default Xbox-style layout (positions may differ from the printed letters):\n"
         + "Left stick: move\nRight stick: camera\nBottom face / A: jump, hold to glide; confirm in menus\nRight face / B: dash; back in menus\nLeft face / X: interact\nTop face / Y: Ultimate\nLB: auto/manual aim\nRB: target lock\nLT: dash\nRT: Ultimate\nStart: pause\nSelect: map\nD-pad: menu navigation; up/down zoom during play\nLB/RB: menu tabs\n\n"
         + "Settings → Controls lets you remap buttons and adjust the stick deadzone. For performance, lower graphics quality in the game's settings.\n\n"
-        + "Accounts and saves stay on pokebonk.com in your browser. Use Enter for an existing username/password account, or Create account. As checked on 19 October 2026, the site does not offer Google sign-in. This launcher preserves the website's own sign-in options.\n\n"
-        + "Keep using the same browser and its normal profile. A different browser or private/incognito mode has separate guest progress and sessions. Do not clear browser site data if you rely on a guest save. Internet is required.\n\n"
-        + "This is an unofficial launcher, not a game emulator or an offline copy. Pokébonk already supplies the controller support. Physical AYN Thor acceptance is still pending.";
+        + "Accounts and saves stay on the official pokebonk.com server. Native play has its own persistent app session, separate from Chrome. Sign in once using your existing Pokébonk username/password under Enter, or use Create account. As checked on 19 October 2026, the site does not offer Google sign-in. This launcher preserves the website's own sign-in options.\n\n"
+        + "Chrome guest progress is not automatically imported into native play. Keep the browser fallback if you rely on a Chrome guest save. Uninstalling or clearing app data can remove the native guest session. Internet is required.\n\n"
+        + "This is an unofficial launcher, not a game emulator or an offline copy. The game runs online in the app with normalized native controls. Physical AYN Thor acceptance is still pending.";
 
     @Override public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
@@ -37,13 +37,14 @@ public final class LauncherActivity extends Activity {
         setContentView(scroll);
         TextView title = text("Pokébonk for Thor", 28);
         box.addView(title);
-        box.addView(text("Official online game · physical controls · browser accounts and saves", 17));
-        Button play = button("Play in Chrome", () -> openGame(true));
+        box.addView(text("Official online game · native controls · official accounts and saves", 17));
+        Button play = button("Play with native controls", () -> startActivity(new Intent(this, GameActivity.class)));
         box.addView(play);
+        box.addView(button("Open in Chrome (browser fallback)", () -> openGame(true)));
         box.addView(button("Choose another browser", () -> openGame(false)));
         box.addView(button("Controls & sign-in", () -> new AlertDialog.Builder(this)
             .setTitle("Playing on your Thor").setMessage(GUIDE).setPositiveButton("OK", null).show()));
-        box.addView(text("No scripts or companion service needed. Use the same browser as your existing save. Google login is not currently offered by Pokébonk.", 15));
+        box.addView(text("Native controls read the Thor directly. Sign in once inside the app for your existing account; Chrome guest data stays in Chrome. Google login is not currently offered by Pokébonk.", 15));
         play.requestFocus();
     }
 

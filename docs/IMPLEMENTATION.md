@@ -1,3 +1,7 @@
+# Historical 0.1.0 design
+
+Superseded by [0.2.0 native controls](NATIVE-CONTROLS.md) after a user-reported menu drift. Retained as implementation history.
+
 # Pokébonk Thor launcher
 
 Intent: downloadable Android APK on Alfonso's GitHub that plays the official online Pokébonk with physical controls and preserves the site's accounts and server saves.

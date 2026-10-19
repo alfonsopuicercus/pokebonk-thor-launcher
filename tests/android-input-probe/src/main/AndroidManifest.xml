@@ -1,0 +1,4 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application android:label="Controller QA probe" />
+    <instrumentation android:name=".InputProbe" android:targetPackage="com.pokebonk.inputprobe" />
+</manifest>
