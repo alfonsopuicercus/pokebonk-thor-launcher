@@ -1,0 +1,38 @@
+name: Bug report
+description: Report a problem with the app or its controller support.
+body:
+  - type: markdown
+    attributes:
+      value: Please search existing issues first. Do not include passwords, tokens, private saves, or unrelated device logs.
+  - type: input
+    id: app_version
+    attributes:
+      label: App version
+      placeholder: 0.3.0-preview
+    validations:
+      required: true
+  - type: textarea
+    id: device
+    attributes:
+      label: Device and software
+      description: Device/controller model, Android version, Android System WebView version, and whether any touch mapper is enabled.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Include the menu or gameplay screen where it happens, and how often.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Controller readings or other details
+      description: For drift, open Start + Select → Controller diagnostics and record readings with the sticks released. Screenshots are optional; remove private information.

@@ -1,28 +1,24 @@
 # Pokébonk for AYN Thor
 
-An unofficial Android app for the **official online [Pokébonk](https://pokebonk.com/)**, with **direct native stick/button input**. Android 8+, internet and a current Android System WebView required.
+**Open the app. Play with your controller.**
 
-**[Download 0.2.0 APK](https://github.com/alfonsopuicercus/pokebonk-thor-launcher/releases/download/v0.2.0-preview/PokeBonk-Thor-Native-0.2.0.apk)** · **[Install and controls](INSTALL.md)**
+An unofficial Android app that loads the official [Pokébonk](https://pokebonk.com/) online game and reads the Thor's sticks and buttons directly. No touch mapping, browser extensions, companion app, or startup browser chooser.
 
-Choose **Play with native controls**. No touch mapping, swipes, Firefox extensions or scripts to install. The app loads the official online game and supplies its Gamepad API with normalized Android controller events. Chrome remains an optional fallback.
+**[Download the APK](https://github.com/alfonsopuicercus/pokebonk-thor-launcher/releases/download/v0.3.0-preview/PokeBonk-Thor-Native-0.3.0.apk)** · [Installation guide](INSTALL.md) · [Report a bug or suggest a fix](https://github.com/alfonsopuicercus/pokebonk-thor-launcher/issues/new/choose)
 
-## Upward-menu drift fix
+## Get started
 
-Version 0.1.0 only launched Chrome. After a report of menu selection moving upward on its own, tests reproduced a bad startup baseline in the official input code. Version 0.2.0 uses fixed Android axis ranges, a 22% stick deadzone, an initial neutral poll, and separate stick/trigger/hat mappings. Quick button presses/releases are queued, and focus loss, pause, disconnect and stale input clear held actions. It does not learn the center from a stick held at startup.
+1. Download **PokeBonk-Thor-Native-0.3.0.apk** from the [release page](https://github.com/alfonsopuicercus/pokebonk-thor-launcher/releases/tag/v0.3.0-preview) on your Thor and install it. Existing users can update in place without uninstalling.
+2. Keep the controls in normal Android gamepad mode and disable any touch-mapping overlay for this game.
+3. Open **Pokébonk for Thor**. The game opens immediately. Use the left stick or D-pad to navigate and the bottom face button to confirm.
 
-Press **Start + Select** or Android Back for controller readings and **Release all inputs**. Physical Thor readings still require device acceptance; the reproduced software cases are not proof of the user's exact hardware mapping.
-
-## Accounts and saves
-
-Native play uses the official `https://pokebonk.com/` website and server, with a persistent app session. **Sign in once inside the app using your existing Pokébonk username/password.** The app's WebView session is separate from Chrome; Chrome guest progress is not automatically imported. Browser fallback and existing browser data are retained. Avoid uninstalling or clearing app data if relying on a native guest session.
-
-As checked on 19 October 2026, Pokébonk exposes guest and username/password accounts, **no Google sign-in provider**. This app preserves the website's available account options. It contains no replacement account backend, game bundle, Pokémon artwork or JavaScript-to-Java interface. External top-level links open in the browser. HTTPS verification remains enabled.
+Requires **Android 8 or later**, internet, and a current **Android System WebView** capable of WebGL. This runs the online game inside the app; it does not install a ROM or offline copy. The APK is a **community preview**.
 
 ## Controls
 
-Xbox-style positions below may differ from the letters printed on a Thor.
+Positions below use Xbox-style names; the letters printed on your device may differ. The game's **Settings → Controls** can remap actions.
 
-| Input | In game | In menus |
+| Input | Gameplay | Menus |
 |---|---|---|
 | Left stick | Move | Navigate |
 | Right stick | Camera | Scroll |
@@ -34,30 +30,47 @@ Xbox-style positions below may differ from the letters printed on a Thor.
 | LT / RT | Dash / Ultimate | — |
 | Start / Select | Pause / map | Start goes back |
 | D-pad | Up/down zoom | Navigate |
-| Start + Select | Native controller checks | Native controller checks |
+| **Start + Select** | **App options** | **App options** |
 
-Keep the Thor in normal Android gamepad mode. The game's **Settings → Controls** remaps actions. Disable any existing touch-mapping overlay for this game. A controller button initializes audio without requiring a screen tap in native mode; actual speaker output remains a hardware check.
+**Start + Select** or **Android Back** opens controls help, controller diagnostics, an optional browser fallback, and Close app. Continue returns to the same game. Browser choices appear only when you ask for them.
 
-## Verification and limits
+If a selection moves by itself, open **Controller diagnostics → Release all inputs**, then return with the sticks released. The native input layer uses Android's declared axis ranges, a 22% minimum stick deadzone, and explicit release handling. [How the drift fix works →](docs/NATIVE-CONTROLS.md)
 
-See [native design and reproduction](docs/NATIVE-CONTROLS.md) and [verification](docs/VERIFICATION.md). Mapper and bridge tests cover idle jitter, held startup, releases, remapping boundaries, queued presses, stale input and lifecycle clearing. Rendered UI tests use the official game with an isolated backend fixture, avoiding real account or save changes.
+## Accounts and saves
 
-**Physical Thor controller mapping, speaker output and authenticated server-save restoration remain unverified.** The new APK is a hardware-test preview. Browser fallback retains the browser's own input behavior.
+Sign in **inside the game** with your existing Pokébonk username and password. The app uses the official website and server and retains its own session between launches. Its session is separate from Chrome: browser guest progress is not automatically imported. Use **App options → Open in browser…** if you rely on a browser guest save. Avoid uninstalling or clearing app data when relying on an app guest session.
 
-## Build and tests
+As checked on 19 October 2026, the website offers guest and username/password accounts, **no Google sign-in provider**. The app preserves the website's available sign-in options; it does not add a separate account service. See the [official game](https://pokebonk.com/) for current availability.
 
-JDK 17 and Android SDK 35. Set `android/local.properties` to your SDK path, or set `ANDROID_HOME`.
+## Help improve it
+
+Bug reports, controller compatibility reports, documentation fixes, and pull requests are welcome. You do not need to code to help.
+
+- **[Report a bug](https://github.com/alfonsopuicercus/pokebonk-thor-launcher/issues/new?template=bug_report.yml)** — include your app version, device, Android/WebView versions, and steps to reproduce.
+- **[Suggest an improvement](https://github.com/alfonsopuicercus/pokebonk-thor-launcher/issues/new?template=improvement.yml)** — explain what you would like to do and how it would help.
+- **[Contribute a fix](CONTRIBUTING.md)** — build instructions, project layout, checks, and pull request guidance.
+
+Share this repository or its release page so people can find the current APK and report feedback in one place. Never include passwords, session tokens, or private save data in public reports.
+
+## Tested status
+
+The initial Thor user reports that native controls now work reasonably well. Automated Java and JavaScript regressions cover the reproduced drift, quick presses, releases, disconnects, and backgrounding. Android emulator checks exercise the actual APK with native controller events. The direct launch and in-app help/diagnostics flow also have an emulator smoke test. See [verification and limits](docs/VERIFICATION.md).
+
+Broader physical-device coverage, speaker output, sleep/resume, and authenticated server-save restoration still need community testing. Website updates may change behavior. Browser fallback uses the browser's original input handling.
+
+## Build
+
+Use **JDK 17**, **Node.js 22+**, and **Android SDK Platform 35 / Build Tools 35.0.0**. Set `ANDROID_HOME` or create `android/local.properties` with `sdk.dir=/path/to/your/sdk`.
 
 ```sh
 node --test tests/*.test.cjs
-cd android
-./gradlew :app:testDebugUnitTest :app:assembleDebug :app:lintDebug
+./android/gradlew -p android :app:testDebugUnitTest :app:assembleDebug :app:lintRelease
 ```
 
-`-PwithInputProbe :inputprobe:assembleDebug` optionally builds a separate emulator-only instrumentation helper. It is not included in the game APK.
+The debug APK is at `android/app/build/outputs/apk/debug/app-debug.apk` and installs separately from the release. [CONTRIBUTING.md](CONTRIBUTING.md) explains emulator checks and release signing. GitHub Actions runs the unit tests, build, and lint for pushes and pull requests.
 
-Private `android/.signing/release.properties` supplies `storePassword` and `keyPassword` for ignored `android/.signing/release.jks`, alias `release`. Without these files, `assembleRelease` produces an unsigned APK. The distributed 0.2.0 APK uses the same key/package as 0.1.0 and can update it in place.
+## Credits and license
 
-## Credits
+App by Alfonso Puicercus, released under the [MIT license](LICENSE). The game is by **Charcher** and its credited contributors, served from the official website. This repository and its APK do not distribute game code, Pokémon artwork, music, or saves. Gradle wrapper retains its upstream license.
 
-App by Alfonso Puicercus, MIT license. Game by **Charcher** and its credited contributors, served by the official website. No game code, Pokémon artwork, music or saves are distributed. This fan app is unaffiliated with the game developer, Nintendo or The Pokémon Company. Gradle wrapper retains its upstream license.
+This fan app is unaffiliated with the game developer, Nintendo, or The Pokémon Company. Pokémon belongs to its respective owners. Game content and services remain subject to their own terms.

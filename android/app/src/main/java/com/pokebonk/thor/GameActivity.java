@@ -91,7 +91,73 @@ public final class GameActivity extends Activity implements InputManager.InputDe
     private void clear(){for(ControllerState s:controllers.values())s.clear();}
     private void suspend(){clear();if(ready&&web!=null&&official(web.getUrl()))web.evaluateJavascript("window.__PB_NATIVE__?.suspend()",null);}
     private void resumeInput(){if(ready&&web!=null&&official(web.getUrl()))web.evaluateJavascript("window.__PB_NATIVE__?.resume()",r->emit(false));}
-    private void showMenu(){suspend();new AlertDialog.Builder(this).setTitle("Pokébonk native controls").setMessage("Direct sticks and buttons. No touch mapping. Start + Select opens this menu.\n\n"+axisMapping+"\n"+raw+"\n\nCentered axes should read near zero. Deadzone: 22%. Return to the game with sticks released.").setPositiveButton("Continue",(d,w)->resumeInput()).setNeutralButton("Release all inputs",(d,w)->{clear();resumeInput();}).setNegativeButton("Close game",(d,w)->finish()).setOnCancelListener(d->resumeInput()).show();}
+    private void showMenu(){
+        suspend();
+        AlertDialog menu=new AlertDialog.Builder(this).setTitle("Pokébonk")
+            .setItems(new String[]{"Continue playing","Controls & sign-in","Controller diagnostics","Open in browser…","Close app"},(dialog,choice)->{
+                switch(choice){
+                    case 0: resumeInput();break;
+                    case 1: showHelp();break;
+                    case 2: showDiagnostics();break;
+                    case 3: showBrowserFallback();break;
+                    case 4: finish();break;
+                }
+            }).setOnCancelListener(dialog->resumeInput()).create();
+        showDialog(menu);
+    }
+    private void showDialog(AlertDialog dialog){
+        // Android dialogs do not consistently treat the physical A/B buttons as confirm/back.
+        dialog.setOnKeyListener((d,code,event)->{
+            if(code==KeyEvent.KEYCODE_BUTTON_B){if(event.getAction()==KeyEvent.ACTION_UP)dialog.cancel();return true;}
+            if(code!=KeyEvent.KEYCODE_BUTTON_A)return false;
+            if(dialog.getListView()!=null){
+                if(event.getAction()==KeyEvent.ACTION_UP){
+                    android.widget.ListView list=dialog.getListView();int position=Math.max(0,list.getSelectedItemPosition());
+                    list.performItemClick(list.getChildAt(position-list.getFirstVisiblePosition()),position,list.getItemIdAtPosition(position));
+                }
+                return true;
+            }
+            return dialog.dispatchKeyEvent(new KeyEvent(event.getDownTime(),event.getEventTime(),event.getAction(),KeyEvent.KEYCODE_DPAD_CENTER,event.getRepeatCount(),event.getMetaState(),event.getDeviceId(),event.getScanCode(),event.getFlags(),event.getSource()));
+        });
+        dialog.setOnShowListener(d->{
+            if(dialog.getListView()!=null){dialog.getListView().requestFocusFromTouch();dialog.getListView().setSelection(0);}
+            else if(dialog.getButton(AlertDialog.BUTTON_POSITIVE)!=null)dialog.getButton(AlertDialog.BUTTON_POSITIVE).requestFocusFromTouch();
+        });
+        dialog.show();
+    }
+    private void showHelp(){
+        showDialog(new AlertDialog.Builder(this).setTitle("Controls & sign-in")
+            .setMessage("The app opens the official online game directly. Keep normal Android gamepad mode enabled and disable touch-mapping overlays.\n\n"
+                +"Left stick: Move / navigate\nRight stick: Camera / scroll\nBottom face: Jump / confirm\nRight face: Dash / back\nLeft face: Interact\nTop face: Ultimate\nLB / RB: Aim / target lock; menu tabs\nLT / RT: Dash / Ultimate\nStart: Pause\nSelect: Map\nD-pad: Navigate / zoom\n\n"
+                +"Start + Select or Android Back opens this menu. Remap actions in the game's Settings → Controls.\n\n"
+                +"Sign in with your existing Pokébonk username/password inside the game. The app keeps its own session, separate from Chrome. Chrome guest progress is not imported. Avoid clearing app data or uninstalling if you rely on a guest session.\n\n"
+                +"The website currently offers no Google sign-in. Internet and a current Android System WebView are required. This is an unofficial app.")
+            .setPositiveButton("Back to game",(dialog,which)->resumeInput()).setOnCancelListener(dialog->resumeInput()).create());
+    }
+    private void showDiagnostics(){
+        showDialog(new AlertDialog.Builder(this).setTitle("Controller diagnostics")
+            .setMessage(axisMapping+"\n"+raw+"\n\nCentered axes should read near zero. Deadzone: 22%. Return to the game with sticks released.")
+            .setPositiveButton("Back to game",(dialog,which)->resumeInput())
+            .setNeutralButton("Release all inputs",(dialog,which)->{clear();resumeInput();})
+            .setOnCancelListener(dialog->resumeInput()).create());
+    }
+    private void showBrowserFallback(){
+        showDialog(new AlertDialog.Builder(this).setTitle("Browser fallback")
+            .setMessage("Use this only if you want the browser's separate session or guest save. Native controller fixes apply inside this app. Returning here keeps the game open.")
+            .setPositiveButton("Open Chrome",(dialog,which)->openBrowser(true))
+            .setNeutralButton("Choose browser",(dialog,which)->openBrowser(false))
+            .setNegativeButton("Back to game",(dialog,which)->resumeInput()).setOnCancelListener(dialog->resumeInput()).create());
+    }
+    private void openBrowser(boolean chrome){
+        Intent browser=new Intent(Intent.ACTION_VIEW,Uri.parse("https://pokebonk.com/"));
+        browser.addCategory(Intent.CATEGORY_BROWSABLE);
+        if(chrome)browser.setPackage("com.android.chrome");
+        else browser=Intent.createChooser(browser,"Use the browser with your Pokébonk save");
+        try{startActivity(browser,ActivityOptions.makeBasic().setLaunchDisplayId(Display.DEFAULT_DISPLAY).toBundle());}
+        catch(ActivityNotFoundException missing){if(chrome)openBrowser(false);else browserUnavailable();}
+        catch(RuntimeException placementUnavailable){try{startActivity(browser);}catch(ActivityNotFoundException missing){if(chrome)openBrowser(false);else browserUnavailable();}}
+    }
+    private void browserUnavailable(){showDialog(new AlertDialog.Builder(this).setMessage("No browser is available. You can continue playing inside this app.").setPositiveButton("Back to game",(dialog,which)->resumeInput()).setOnCancelListener(dialog->resumeInput()).create());}
     @Override public void onBackPressed(){showMenu();}
     @Override protected void onPause(){foreground=false;suspend();if(web!=null)web.onPause();CookieManager.getInstance().flush();super.onPause();}
     @Override protected void onResume(){super.onResume();foreground=true;if(web!=null){web.onResume();immersive();resumeInput();}}

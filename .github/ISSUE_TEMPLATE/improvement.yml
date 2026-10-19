@@ -1,0 +1,15 @@
+name: Improvement or compatibility report
+description: Suggest a change, offer a fix, or share results from another device.
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like to improve or share?
+      description: Explain the use case, or describe the device and app version you tested.
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Details and possible approach
+      description: Helpful context, proposed behavior, test results, or a fix you would like to contribute. Do not include account credentials or private saves.

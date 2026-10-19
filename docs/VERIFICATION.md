@@ -1,4 +1,18 @@
-# Verification — native 0.2.0 — 2026-10-19
+# Verification — 2026-10-19
+
+## 0.3.0 community preview
+
+The initial Thor user reports that native play now works reasonably well. This is an informal device report, not exhaustive hardware certification.
+
+The app icon now opens or resumes GameActivity immediately through the existing launcher component, which finishes without showing a menu. Help, diagnostics, optional browser fallback, and Close app are available through Start + Select or Android Back. App dialogs explicitly handle native A/B and start with the Continue row selected.
+
+Fresh checks: 7 Java and 10 JavaScript unit tests pass; the official input-module/bridge regression passes 60 simulated seconds of centered menu input. Android debug and signed release builds pass, with lint reporting 0 errors and the same 3 reviewed warnings described below. The installed debug APK smoke test passes direct app-icon launch, WebView visibility without a chooser, in-app help and return using native A, diagnostics/release, native A after touch, D-pad selection, and native B cancelling browser options. The test now waits for the expected active UI before sending the next event; early harness failures included accessibility startup timing and Android's slower UI dump process. A separate, test-only instrumentation helper snapshots native dialogs without traversing game content.
+
+The APK retains application ID com.pokebonk.thor and the existing signing certificate, with versionCode 3. No account/session migration or input-mapper change is introduced. Contribution guides, issue forms, a pull request template and read-only CI are included. CI builds/tests/lints; it does not sign or publish APKs.
+
+Authenticated server-save restoration, broader physical controller/device coverage, speaker output and sleep/resume still need user or community checks. Detailed 0.2.0 reproduction and fixture evidence follow.
+
+## 0.2.0 native controls evidence
 
 User clarified the fault is **menu selection moving upward**. The original 0.1.0 Chrome launcher did not normalize input. Its standard-pad characterization was insufficient to establish physical Thor compatibility.
 

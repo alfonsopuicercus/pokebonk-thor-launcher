@@ -5,7 +5,7 @@ const crypto = require('node:crypto');
 const root = path.resolve(__dirname, '..');
 const out = path.join(root, 'dist');
 fs.mkdirSync(out, { recursive: true });
-const name = 'PokeBonk-Thor-Native-0.2.0.apk';
+const name = 'PokeBonk-Thor-Native-0.3.0.apk';
 fs.copyFileSync(path.join(root, 'android/app/build/outputs/apk/release/app-release.apk'), path.join(out, name));
 fs.copyFileSync(path.join(root, 'INSTALL.md'), path.join(out, 'INSTALL.md'));
 fs.writeFileSync(path.join(out, 'SHA256SUMS.txt'), [name, 'INSTALL.md', 'QA.json'].map(file =>

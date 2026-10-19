@@ -1,21 +1,33 @@
-# Pokébonk native controls — AYN Thor
+# Install Pokébonk for Thor
 
-1. Open [the 0.2.0 release](https://github.com/alfonsopuicercus/pokebonk-thor-launcher/releases/tag/v0.2.0-preview) on the Thor and download **PokeBonk-Thor-Native-0.2.0.apk** from Assets.
-2. Install it over 0.1.0. Same package/signing key, so no uninstall is needed.
-3. Open **Pokébonk for Thor → Play with native controls**. Keep normal Android gamepad mode enabled; disable any old touch-mapping overlay. No gesture mapping or screen tap is needed for controls.
-4. Leave the sticks released initially. Navigate with the left stick/D-pad, confirm with the bottom face button, and go back with the right face button. The game remaps actions under **Settings → Controls**.
-5. Sign in once inside native play with your existing Pokébonk username/password and check expected server progress before a longer run.
+1. Open [the latest community preview](https://github.com/alfonsopuicercus/pokebonk-thor-launcher/releases/tag/v0.3.0-preview) on your Thor. Under **Assets**, download **PokeBonk-Thor-Native-0.3.0.apk**.
+2. Open the downloaded APK and allow installation from that browser or file manager if Android asks. Install or update **Pokébonk for Thor**. Version 0.3.0 uses the same package and signing key as 0.1.0 and 0.2.0, so no uninstall is needed.
+3. Keep normal Android gamepad mode enabled and disable any touch-mapping overlay for this game.
+4. Open **Pokébonk for Thor**. The game loads directly inside the app; there is no launcher menu or browser to choose. Internet and a current, WebGL-capable Android System WebView are required.
+5. Leave the sticks released initially. Use the left stick/D-pad to navigate, the bottom face button to confirm, and the right face button to go back. Remap actions in the game's **Settings → Controls**.
 
-**Accounts:** native play has its own persistent app session, separate from Chrome. Existing Chrome guest progress is not automatically imported. Use **Open in Chrome (browser fallback)** if relying on that browser's guest save. No browser data is cleared. Avoid clearing app data/uninstalling if relying on a native guest session. PokéSurvivor is a different game and its progress is not imported. Pokébonk currently offers no Google sign-in provider.
+## App options
 
-## If a menu still moves by itself
+Press **Start + Select** together or **Android Back**:
 
-Press **Start + Select** together, or Android Back, to open controller checks. The screen shows raw stick readings and the right-stick axis pair. Use **Release all inputs**, return with sticks released, and check the menu again. The native deadzone is 22%; centers come from Android's axis ranges rather than the first sample. A physical Thor issue outside the reproduced cases may still need its actual readings.
+- **Continue playing** returns to the current game.
+- **Controls & sign-in** shows button mappings and account guidance.
+- **Controller diagnostics** shows raw stick readings, the right-stick axis pair, and **Release all inputs**. After releasing inputs, return with the sticks centered. The native minimum deadzone is 22%.
+- **Open in browser…** is an optional fallback for an existing browser session. Native controller fixes apply inside the app.
+- **Close app** exits.
 
-## Buttons
+The extra options never appear on startup. No gesture mapper, extension, or companion app is needed.
 
-Left stick: move / menu navigation. Right stick: camera / scrolling. Bottom/right/left/top face: jump / dash / interact / Ultimate. LB: aim. RB: target lock. LT/RT: dash/Ultimate. Start: pause. Select: map. D-pad: menu navigation, zoom during gameplay. LB/RB switch menu tabs. Printed button letters can differ from Xbox-style positions.
+## Accounts
 
-## Preview limits
+Use the game's existing Pokébonk username/password sign-in. Sign in once inside this app and check that your expected server progress appears before a longer run. The website currently offers no Google sign-in provider.
 
-Internet and a WebGL-capable, current Android System WebView are required. The official game updates online. No ROM, offline game copy, touch mapper or companion service is installed. Tests cover the reproduced input faults and APK path; physical Thor and authenticated save restoration remain separate acceptance checks. Chrome fallback uses Chrome's original controller behavior rather than the new native input layer.
+The app keeps its own session, separate from Chrome. Existing browser guest progress is not imported or cleared; use browser fallback if you rely on it. Avoid clearing app data or uninstalling when relying on an app guest session. Updating in place retains app data. PokéSurvivor is a different game and its progress is not imported.
+
+## Troubleshooting and feedback
+
+If a menu moves by itself, open **Controller diagnostics → Release all inputs**. If it continues, note the readings with the sticks centered and [report the issue](https://github.com/alfonsopuicercus/pokebonk-thor-launcher/issues/new/choose), including app version, device, and Android/WebView versions.
+
+For a blank or slow game, check your connection and update Android System WebView. Lower graphics quality in the game's settings if needed. The official game updates online; [verification](docs/VERIFICATION.md) describes what has been checked and what still needs device testing.
+
+The release includes **SHA256SUMS.txt** and **QA.json**. On a computer, `shasum -a 256 PokeBonk-Thor-Native-0.3.0.apk` can be compared with the checksum file. Bugs, suggestions, and pull requests are welcome through [GitHub](https://github.com/alfonsopuicercus/pokebonk-thor-launcher).
