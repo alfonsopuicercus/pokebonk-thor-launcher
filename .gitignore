@@ -1,0 +1,7 @@
+android/.gradle/
+android/local.properties
+android/**/build/
+android/.signing/
+dist/
+*.log
+.DS_Store
