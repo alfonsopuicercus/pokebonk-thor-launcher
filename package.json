@@ -1,0 +1,13 @@
+{
+  "name": "pokebonk-thor-launcher",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write \"**/*.{java,js,cjs,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{java,js,cjs,json,md,yml,yaml}\"",
+    "test": "node --test tests/*.test.cjs"
+  },
+  "devDependencies": {
+    "prettier": "3.9.10",
+    "prettier-plugin-java": "2.11.0"
+  }
+}

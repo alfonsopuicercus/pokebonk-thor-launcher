@@ -1,7 +1,21 @@
-plugins { id 'com.android.application' }
+plugins {
+    id 'com.android.application'
+}
+
 android {
     namespace 'com.pokebonk.inputprobe'
     compileSdk 35
-    defaultConfig { applicationId 'com.pokebonk.inputprobe'; minSdk 26; targetSdk 35; versionCode 1; versionName '1' }
-    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+
+    defaultConfig {
+        applicationId 'com.pokebonk.inputprobe'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '1'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
 }

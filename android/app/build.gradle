@@ -1,10 +1,17 @@
-plugins { id 'com.android.application' }
+plugins {
+    id 'com.android.application'
+}
+
 def keys = new Properties()
 def keyFile = rootProject.file('.signing/release.properties')
-if (keyFile.exists()) keyFile.withInputStream { keys.load(it) }
+if (keyFile.exists()) {
+    keyFile.withInputStream { keys.load(it) }
+}
+
 android {
     namespace 'com.pokebonk.thor'
     compileSdk 35
+
     defaultConfig {
         applicationId 'com.pokebonk.thor'
         minSdk 26
@@ -12,18 +19,40 @@ android {
         versionCode 3
         versionName '0.3.0'
     }
-    if (keyFile.exists()) signingConfigs { preview {
-        storeFile rootProject.file('.signing/release.jks')
-        storePassword keys.getProperty('storePassword')
-        keyAlias 'release'
-        keyPassword keys.getProperty('keyPassword')
-    } }
-    buildTypes {
-        release { if (keyFile.exists()) signingConfig signingConfigs.preview }
-        debug { applicationIdSuffix '.debug'; versionNameSuffix '-debug' }
+
+    if (keyFile.exists()) {
+        signingConfigs {
+            preview {
+                storeFile rootProject.file('.signing/release.jks')
+                storePassword keys.getProperty('storePassword')
+                keyAlias 'release'
+                keyPassword keys.getProperty('keyPassword')
+            }
+        }
     }
-    buildFeatures { buildConfig true }
-    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+
+    buildTypes {
+        release {
+            if (keyFile.exists()) {
+                signingConfig signingConfigs.preview
+            }
+        }
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+        }
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
 }
 
-dependencies { testImplementation 'junit:junit:4.13.2' }
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+}

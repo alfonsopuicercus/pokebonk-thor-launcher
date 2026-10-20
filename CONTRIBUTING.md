@@ -13,21 +13,29 @@ Please keep reports constructive. Remove passwords, tokens, personal account det
 Install JDK 17, Node.js 22 or newer, and Android SDK Platform 35 / Build Tools 35.0.0. Set `ANDROID_HOME` or `android/local.properties` (`sdk.dir=/absolute/sdk/path`). The Gradle wrapper is included; no global Gradle installation is required.
 
 ```sh
+npm ci --ignore-scripts
+npm run format:check
 node --test tests/*.test.cjs
 ./android/gradlew -p android :app:testDebugUnitTest :app:assembleDebug :app:lintRelease
 ```
 
+### Code style and input constants
+
+Run `npm run format` before submitting changes. Prettier and its Java plugin are pinned in `package-lock.json`; `npm run format:check` checks Java, JavaScript, tests, JSON, YAML, and Markdown in CI. `.editorconfig` also records indentation and line endings. Formatting tools are development dependencies and are not included in the Android app.
+
+Keep methods and control flow readable, use braces for new Java control flow, and use descriptive names for controller state. Prefer Android's `KeyEvent.KEYCODE_*` and `MotionEvent.AXIS_*` constants over numeric hardware codes. `ControllerState` names the standard button indices, deadzone, and button threshold; `GameActivity` names the heartbeat interval; `native-gamepad.js` names the stale-input timeout and queue limit. Comments explain startup calibration, queued button edges, and lifecycle release. Keep Java and JavaScript standard-layout sizes consistent when changing the input protocol.
+
 Install `android/app/build/outputs/apk/debug/app-debug.apk` on a test device. The `.debug` package installs alongside the published app. Debug builds enable WebView inspection; release builds do not.
 
-| Path | Purpose |
-|---|---|
-| `android/app/src/main/java/com/pokebonk/thor/` | App entry, WebView lifecycle, native controller mapping, app dialogs |
-| `android/app/src/main/assets/native-gamepad.js` | Standard Gamepad API bridge with input release handling |
-| `android/app/src/test/` | Java controller regressions |
-| `tests/*.test.cjs` | JavaScript bridge regressions |
-| `tests/android-launch-smoke.cjs` | Installed APK startup and in-app options smoke test |
-| `tests/android-input-probe/` | Separate emulator-only joystick injector |
-| `docs/` | Input design, reproduction, verification history |
+| Path                                            | Purpose                                                              |
+| ----------------------------------------------- | -------------------------------------------------------------------- |
+| `android/app/src/main/java/com/pokebonk/thor/`  | App entry, WebView lifecycle, native controller mapping, app dialogs |
+| `android/app/src/main/assets/native-gamepad.js` | Standard Gamepad API bridge with input release handling              |
+| `android/app/src/test/`                         | Java controller regressions                                          |
+| `tests/*.test.cjs`                              | JavaScript bridge regressions                                        |
+| `tests/android-launch-smoke.cjs`                | Installed APK startup and in-app options smoke test                  |
+| `tests/android-input-probe/`                    | Separate emulator-only joystick injector                             |
+| `docs/`                                         | Input design, reproduction, verification history                     |
 
 ### Emulator smoke test
 
@@ -37,12 +45,6 @@ Use a dedicated, unlocked test emulator with the debug APK and the separate inpu
 ./android/gradlew -p android -PwithInputProbe :inputprobe:assembleDebug
 adb -s emulator-5554 install -r tests/android-input-probe/build/outputs/apk/debug/inputprobe-debug.apk
 ANDROID_SERIAL=emulator-5554 node tests/android-launch-smoke.cjs
-```
-
-The optional input probe builds with:
-
-```sh
-./android/gradlew -p android -PwithInputProbe :inputprobe:assembleDebug
 ```
 
 It is a separate instrumentation APK and is never bundled into the game. Emulator tests do not certify physical Thor compatibility. For controller changes, check idle menus, intentional navigation and release, movement/camera release, Start pause/resume, Start + Select options, background/return, and controller disconnect. Use a test account or local fixture for gameplay testing, and describe the environment honestly.

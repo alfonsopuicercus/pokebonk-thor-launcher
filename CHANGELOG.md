@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Reformatted Java, JavaScript, tests, and build files for readable contributions.
+- Named controller mappings, axis identifiers, timing limits, and input thresholds without changing their values.
+- Added pinned formatting tools, editor settings, and a formatting check in CI.
+- Documented Obtainium setup, including the prerelease toggle required for community previews.
+
 ## 0.3.0 community preview — 2026-10-19
 
 - Opening the app icon goes straight to the game, keeping the existing app identity for updates.

@@ -1,5 +1,11 @@
 # Verification — 2026-10-19
 
+## Source readability cleanup — 2026-10-20
+
+Current main uses consistent formatting, named controller codes/layout/timing constants, and a pinned formatter check. The 7 Java and 10 JavaScript tests pass, along with debug/release compilation, the optional test-probe build, and release lint. A Java differential trace compares all key codes 0–300 plus 25,000 deterministic input frames against the previous mapper. The bridge AST matches the previous version after accounting for named constants, local-variable names, and formatting; independent review also compares 10,000 bridge operations against the baseline.
+
+This is a source-maintenance change. The distributed 0.3.0 community-preview APK and its original verification receipt remain attached to their release commit. Obtainium's prerelease setting is documented in the current README/install guide.
+
 ## 0.3.0 community preview
 
 The initial Thor user reports that native play now works reasonably well. This is an informal device report, not exhaustive hardware certification.

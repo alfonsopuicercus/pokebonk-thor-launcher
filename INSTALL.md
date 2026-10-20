@@ -6,6 +6,14 @@
 4. Open **Pokébonk for Thor**. The game loads directly inside the app; there is no launcher menu or browser to choose. Internet and a current, WebGL-capable Android System WebView are required.
 5. Leave the sticks released initially. Use the left stick/D-pad to navigate, the bottom face button to confirm, and the right face button to go back. Remap actions in the game's **Settings → Controls**.
 
+## Updates with Obtainium
+
+1. Add [the repository URL](https://github.com/alfonsopuicercus/pokebonk-thor-launcher) as a **GitHub** source, rather than using a fixed APK download URL.
+2. Enable **Include prereleases** / **Allow prereleases**. All current APK releases are community previews; filtering for stable releases hides them.
+3. Let Obtainium find the release APK and install updates normally. The published APK uses the same application ID and signing key across releases.
+
+The 0.3.0 release has one APK, so no filename or architecture filter is required. Obtainium settings can vary by version; see its [GitHub source documentation](https://wiki.obtainium.imranr.dev/sources/#github).
+
 ## App options
 
 Press **Start + Select** together or **Android Back**:

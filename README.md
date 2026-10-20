@@ -14,23 +14,27 @@ An unofficial Android app that loads the official [Pokébonk](https://pokebonk.c
 
 Requires **Android 8 or later**, internet, and a current **Android System WebView** capable of WebGL. This runs the online game inside the app; it does not install a ROM or offline copy. The APK is a **community preview**.
 
+### Updates with Obtainium
+
+Add [this repository](https://github.com/alfonsopuicercus/pokebonk-thor-launcher) as a GitHub source in Obtainium and enable **Include prereleases** (called **Allow prereleases** in some versions). Releases are currently tagged as community previews, so a stable-only filter will not find them. Use the repository URL rather than a link to one APK so future releases can be detected. See [installation and updates](INSTALL.md) and [Obtainium's GitHub source documentation](https://wiki.obtainium.imranr.dev/sources/#github).
+
 ## Controls
 
 Positions below use Xbox-style names; the letters printed on your device may differ. The game's **Settings → Controls** can remap actions.
 
-| Input | Gameplay | Menus |
-|---|---|---|
-| Left stick | Move | Navigate |
-| Right stick | Camera | Scroll |
-| Bottom face / A | Jump; hold to glide | Confirm |
-| Right face / B | Dash | Back |
-| Left face / X | Interact | Reroll where offered |
-| Top face / Y | Ultimate | Skip where offered |
-| LB / RB | Aim / target lock | Previous / next tab |
-| LT / RT | Dash / Ultimate | — |
-| Start / Select | Pause / map | Start goes back |
-| D-pad | Up/down zoom | Navigate |
-| **Start + Select** | **App options** | **App options** |
+| Input              | Gameplay            | Menus                |
+| ------------------ | ------------------- | -------------------- |
+| Left stick         | Move                | Navigate             |
+| Right stick        | Camera              | Scroll               |
+| Bottom face / A    | Jump; hold to glide | Confirm              |
+| Right face / B     | Dash                | Back                 |
+| Left face / X      | Interact            | Reroll where offered |
+| Top face / Y       | Ultimate            | Skip where offered   |
+| LB / RB            | Aim / target lock   | Previous / next tab  |
+| LT / RT            | Dash / Ultimate     | —                    |
+| Start / Select     | Pause / map         | Start goes back      |
+| D-pad              | Up/down zoom        | Navigate             |
+| **Start + Select** | **App options**     | **App options**      |
 
 **Start + Select** or **Android Back** opens controls help, controller diagnostics, an optional browser fallback, and Close app. Continue returns to the same game. Browser choices appear only when you ask for them.
 
@@ -63,6 +67,8 @@ Broader physical-device coverage, speaker output, sleep/resume, and authenticate
 Use **JDK 17**, **Node.js 22+**, and **Android SDK Platform 35 / Build Tools 35.0.0**. Set `ANDROID_HOME` or create `android/local.properties` with `sdk.dir=/path/to/your/sdk`.
 
 ```sh
+npm ci --ignore-scripts
+npm run format:check
 node --test tests/*.test.cjs
 ./android/gradlew -p android :app:testDebugUnitTest :app:assembleDebug :app:lintRelease
 ```

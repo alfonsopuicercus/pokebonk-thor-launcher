@@ -11,6 +11,7 @@ Inspection on 2026-10-19: official v0.7.5 already supplies Gamepad API input, du
 Architecture decision: a permission-free native Android launcher opens https://pokebonk.com/ in regular Chrome (or the selected default browser). Browser cookies, authentication, storage, game updates and saves remain on the official origin. No WebView, copied game, proxy, userscript or second-screen service is required. Existing Chrome sessions are retained. A browser chooser supports an existing profile in another browser. Internet is required by the browser.
 
 Plan:
+
 1. Characterize the published game's controller mapping, menus, release/disconnect behavior and available sign-in methods; save QA evidence outside the repository.
 2. Build a small native launcher with Play, browser choice and a physical-button-accessible controls/sign-in guide. Preserve the unmodified official URL and original browser profile. Build/lint and verify a signed release APK; keep signing material ignored.
 3. Publish source and a preview APK with installation guide and checksums to a new public GitHub repository. Verify anonymous downloads and hashes; record handoff in PARA Vault.

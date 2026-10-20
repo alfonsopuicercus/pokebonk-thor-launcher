@@ -18,15 +18,19 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
-          node-version: '24'
+          node-version: "24"
           package-manager-cache: false
+      - name: Install formatting tools
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Source formatting
+        run: npm run format:check
       - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: "17"
       - uses: android-actions/setup-android@be39fa834029ff78f1a44aa3bb0819b8fc2bd8fd # v4
         with:
-          packages: 'platform-tools platforms;android-35 build-tools;35.0.0'
+          packages: "platform-tools platforms;android-35 build-tools;35.0.0"
       - name: JavaScript controller regressions
         run: node --test tests/*.test.cjs
       - name: Android unit tests, build and lint

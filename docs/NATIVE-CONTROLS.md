@@ -11,3 +11,18 @@ Native play loads the official online website in an Android WebView, captures An
 The remote game, username/password authentication and server saves remain official. The native WebView has its own persistent session and does not import Chrome cookies or guest saves. Browser fallback remains available, and no existing browser data is cleared. Google sign-in remains unavailable on the website. An initial real controller button initializes game audio through an unused F24 key notification; gameplay buttons remain gamepad events. Android audio playback is configured without a touchscreen gesture requirement.
 
 Plan: add mapper and bridge regression tests before implementation; test actual rendered UI using an isolated backend fixture, test native Android controller events through an emulator, review lifecycle/account isolation, build/lint/sign, publish a new preview only after the checks pass, retain explicit hardware acceptance limits.
+
+## Input protocol reference
+
+`ControllerState.java` normalizes Android events; `GameActivity.java` sends frames to `native-gamepad.js`. The bridge exposes one standard-layout pad to the game.
+
+| Value              | Name / location                      | Purpose                                                                     |
+| ------------------ | ------------------------------------ | --------------------------------------------------------------------------- |
+| 4 axes, 17 buttons | Layout counts in Java and JavaScript | Keep the native frame and browser pad shape consistent.                     |
+| 0.22               | `ControllerState.STICK_DEADZONE`     | Ignore small centered-stick noise without learning a held startup position. |
+| 0.5                | Button / hat thresholds              | Convert analog button and hat values to pressed or directional state.       |
+| 50 ms              | `GameActivity.HEARTBEAT_INTERVAL_MS` | Refresh held input while the game is active.                                |
+| 500 ms             | `INPUT_TIMEOUT_MS` in the bridge     | Release stale input when native updates stop.                               |
+| 32 frames          | `MAX_QUEUED_FRAMES` in the bridge    | Bound the queued press/release edges; overflow waits for neutral input.     |
+
+Hardware identifiers use Android's named `KeyEvent.KEYCODE_*` and `MotionEvent.AXIS_*` constants. The button-code array is ordered by browser Gamepad button index; its position is not an Android key code. Select and Start are indices 8 and 9. The right stick prefers signed RX/RY ranges, then signed Z/RZ. Tests keep literal expected values to independently check this mapping.
